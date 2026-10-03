@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>B & P — Our moments</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f6f2ec;color:#473f36;font-family:Arial,sans-serif}main{max-width:1120px;margin:auto;padding:22px 16px}header{text-align:center;margin:0 0 18px}h1{font-family:Georgia,serif;font-weight:400;font-size:30px;margin:0 0 6px}header p{font-size:11px;letter-spacing:3px;margin:0;color:#7d7060}.frame{position:relative;background:#e9e3da;border-radius:10px;overflow:hidden}.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}.track::-webkit-scrollbar{display:none}.slide{margin:0;flex:0 0 100%;width:100%;scroll-snap-align:center;scroll-snap-stop:always;display:grid;place-items:center;aspect-ratio:3/2}.slide img{display:block;width:100%;height:100%;object-fit:contain;min-height:0}.arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:1px solid #fff9;border-radius:50%;background:#fffD;color:#473f36;font-size:30px;cursor:pointer}.prev{left:12px}.next{right:12px}button:focus-visible{outline:3px solid #9b6930;outline-offset:3px}.controls{display:flex;justify-content:center;align-items:center;gap:16px;margin:16px 0 8px;font-size:13px}.play{background:transparent;border:1px solid #c8bcae;border-radius:20px;padding:8px 14px;color:inherit;cursor:pointer}.dots{display:flex;flex-wrap:wrap;max-width:380px;margin:auto;justify-content:center;gap:0}.dot{padding:8px;border:0;background:transparent;cursor:pointer}.dot:after{content:'';display:block;width:7px;height:7px;background:#cfc6ba;border-radius:50%}.dot[aria-current=true]:after{background:#76614b}.hint{text-align:center;font-size:12px;color:#867869;margin:8px 0 0}@media(max-width:600px){main{padding:16px 8px}.slide{aspect-ratio:3/4}.arrow{width:38px;height:38px}.prev{left:6px}.next{right:6px}h1{font-size:26px}}
+</style>
+</head>
+<body><main aria-label="แกลเลอรีภาพงานแต่งงาน"><header><h1>B &amp; P</h1><p>OUR MOMENTS</p></header>
+<section class="frame" aria-roledescription="carousel" aria-label="ภาพถ่าย 20 รูป"><div class="track" tabindex="0" aria-label="ปัดซ้ายขวาหรือใช้ปุ่มลูกศรเพื่อดูภาพ"></div><button class="arrow prev" aria-label="รูปก่อนหน้า">‹</button><button class="arrow next" aria-label="รูปถัดไป">›</button></section>
+<div class="controls"><span id="count" role="status" aria-live="polite">1 / 20</span><button class="play" aria-pressed="false">เล่นอัตโนมัติ</button></div><nav class="dots" aria-label="เลือกรูป"></nav><p class="hint">ปัดซ้าย–ขวาเพื่อชมภาพ</p></main>
+<script>
+const names=Array.from({length:20},(_,i)=>`BP${String(i+1).padStart(2,'0')}.${i===11?'jpg':'JPG'}`);
+const track=document.querySelector('.track'),dots=document.querySelector('.dots'),play=document.querySelector('.play'),count=document.querySelector('#count');
+let current=0,timer=null,frame;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+names.forEach((name,i)=>{const slide=document.createElement('figure');slide.className='slide';slide.setAttribute('role','group');slide.setAttribute('aria-label',`รูปที่ ${i+1} จาก 20`);const img=new Image();img.src=`photos/${name}`;img.alt=`ภาพคู่บ่าวสาว ${name.slice(0,4)}`;img.loading=i===0?'eager':'lazy';img.decoding='async';img.draggable=false;slide.append(img);track.append(slide);const dot=document.createElement('button');dot.className='dot';dot.setAttribute('aria-label',`ดูรูปที่ ${i+1}`);dot.addEventListener('click',()=>{stop();go(i)});dots.append(dot)});
+function update(){count.textContent=`${current+1} / ${names.length}`;[...dots.children].forEach((dot,i)=>dot.setAttribute('aria-current',String(i===current)))}
+function go(i){track.scrollTo({left:((i+names.length)%names.length)*track.clientWidth,behavior:reduced.matches?'instant':'smooth'})}
+function stop(){clearInterval(timer);timer=null;play.textContent='เล่นอัตโนมัติ';play.setAttribute('aria-pressed','false')}
+track.addEventListener('scroll',()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{current=Math.round(track.scrollLeft/track.clientWidth);update()})});
+document.querySelector('.prev').onclick=()=>{stop();go(current-1)};document.querySelector('.next').onclick=()=>{stop();go(current+1)};
+track.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();stop();go(e.key==='Home'?0:e.key==='End'?19:current+(e.key==='ArrowRight'?1:-1))}});
+track.addEventListener('pointerdown',stop);play.onclick=()=>{if(timer){stop();return}play.textContent='หยุดอัตโนมัติ';play.setAttribute('aria-pressed','true');timer=setInterval(()=>go(current+1),5000)};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
+let width=track.clientWidth;new ResizeObserver(()=>{if(track.clientWidth!==width){width=track.clientWidth;track.scrollTo({left:current*width,behavior:'instant'})}}).observe(track);update();
+</script></body></html>

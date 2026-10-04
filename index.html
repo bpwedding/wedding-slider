@@ -1,28 +1,723 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>B & P — Our moments</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>B & P Wedding Gallery</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f6f2ec;color:#473f36;font-family:Arial,sans-serif}main{max-width:1120px;margin:auto;padding:22px 16px}header{text-align:center;margin:0 0 18px}h1{font-family:Georgia,serif;font-weight:400;font-size:30px;margin:0 0 6px}header p{font-size:11px;letter-spacing:3px;margin:0;color:#7d7060}.frame{position:relative;background:#e9e3da;border-radius:10px;overflow:hidden}.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}.track::-webkit-scrollbar{display:none}.slide{margin:0;flex:0 0 100%;width:100%;scroll-snap-align:center;scroll-snap-stop:always;display:grid;place-items:center;aspect-ratio:3/2}.slide img{display:block;width:100%;height:100%;object-fit:contain;min-height:0}.arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:1px solid #fff9;border-radius:50%;background:#fffD;color:#473f36;font-size:30px;cursor:pointer}.prev{left:12px}.next{right:12px}button:focus-visible{outline:3px solid #9b6930;outline-offset:3px}.controls{display:flex;justify-content:center;align-items:center;gap:16px;margin:16px 0 8px;font-size:13px}.play{background:transparent;border:1px solid #c8bcae;border-radius:20px;padding:8px 14px;color:inherit;cursor:pointer}.dots{display:flex;flex-wrap:wrap;max-width:380px;margin:auto;justify-content:center;gap:0}.dot{padding:8px;border:0;background:transparent;cursor:pointer}.dot:after{content:'';display:block;width:7px;height:7px;background:#cfc6ba;border-radius:50%}.dot[aria-current=true]:after{background:#76614b}.hint{text-align:center;font-size:12px;color:#867869;margin:8px 0 0}@media(max-width:600px){main{padding:16px 8px}.slide{aspect-ratio:3/4}.arrow{width:38px;height:38px}.prev{left:6px}.next{right:6px}h1{font-size:26px}}
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  /* ==============================
+     MAIN SLIDER
+  ============================== */
+
+  .slider {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: transparent;
+    user-select: none;
+    touch-action: pan-y;
+  }
+
+  .slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.55s ease;
+  }
+
+  .slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+
+    /* ป้องกันการลากรูป */
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+
+
+  /* ==============================
+     ARROWS
+  ============================== */
+
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 44px;
+    height: 44px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.28);
+    color: white;
+
+    font-size: 25px;
+    font-weight: 300;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    z-index: 20;
+
+    transition:
+      background 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .arrow:hover {
+    background: rgba(0, 0, 0, 0.50);
+  }
+
+  .arrow:active {
+    transform: translateY(-50%) scale(0.92);
+  }
+
+  .prev {
+    left: 16px;
+  }
+
+  .next {
+    right: 16px;
+  }
+
+
+  /* ==============================
+     DOTS
+  ============================== */
+
+  .dots {
+    position: absolute;
+
+    left: 50%;
+    bottom: 16px;
+
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 7px 11px;
+
+    border-radius: 20px;
+
+    background: rgba(0, 0, 0, 0.15);
+
+    z-index: 20;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.55);
+
+    cursor: pointer;
+
+    transition:
+      transform 0.25s ease,
+      background 0.25s ease;
+  }
+
+  .dot.active {
+    background: white;
+    transform: scale(1.35);
+  }
+
+
+  /* ==============================
+     MOBILE
+  ============================== */
+
+  @media (max-width: 600px) {
+
+    .arrow {
+      width: 38px;
+      height: 38px;
+
+      font-size: 22px;
+    }
+
+    .prev {
+      left: 10px;
+    }
+
+    .next {
+      right: 10px;
+    }
+
+    .dots {
+      bottom: 10px;
+      gap: 5px;
+      padding: 6px 9px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+    }
+  }
+
 </style>
 </head>
-<body><main aria-label="แกลเลอรีภาพงานแต่งงาน"><header><h1>B &amp; P</h1><p>OUR MOMENTS</p></header>
-<section class="frame" aria-roledescription="carousel" aria-label="ภาพถ่าย 20 รูป"><div class="track" tabindex="0" aria-label="ปัดซ้ายขวาหรือใช้ปุ่มลูกศรเพื่อดูภาพ"></div><button class="arrow prev" aria-label="รูปก่อนหน้า">‹</button><button class="arrow next" aria-label="รูปถัดไป">›</button></section>
-<div class="controls"><span id="count" role="status" aria-live="polite">1 / 20</span><button class="play" aria-pressed="false">เล่นอัตโนมัติ</button></div><nav class="dots" aria-label="เลือกรูป"></nav><p class="hint">ปัดซ้าย–ขวาเพื่อชมภาพ</p></main>
+
+
+<body>
+
+<div class="slider" id="slider">
+
+  <div class="slides" id="slides"></div>
+
+  <button
+    class="arrow prev"
+    id="prev"
+    aria-label="Previous image">
+    &#10094;
+  </button>
+
+  <button
+    class="arrow next"
+    id="next"
+    aria-label="Next image">
+    &#10095;
+  </button>
+
+  <div
+    class="dots"
+    id="dots">
+  </div>
+
+</div>
+
+
 <script>
-const names=Array.from({length:20},(_,i)=>`BP${String(i+1).padStart(2,'0')}.${i===11?'jpg':'JPG'}`);
-const track=document.querySelector('.track'),dots=document.querySelector('.dots'),play=document.querySelector('.play'),count=document.querySelector('#count');
-let current=0,timer=null,frame;
-const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-names.forEach((name,i)=>{const slide=document.createElement('figure');slide.className='slide';slide.setAttribute('role','group');slide.setAttribute('aria-label',`รูปที่ ${i+1} จาก 20`);const img=new Image();img.src=`photos/${name}`;img.alt=`ภาพคู่บ่าวสาว ${name.slice(0,4)}`;img.loading=i===0?'eager':'lazy';img.decoding='async';img.draggable=false;slide.append(img);track.append(slide);const dot=document.createElement('button');dot.className='dot';dot.setAttribute('aria-label',`ดูรูปที่ ${i+1}`);dot.addEventListener('click',()=>{stop();go(i)});dots.append(dot)});
-function update(){count.textContent=`${current+1} / ${names.length}`;[...dots.children].forEach((dot,i)=>dot.setAttribute('aria-current',String(i===current)))}
-function go(i){track.scrollTo({left:((i+names.length)%names.length)*track.clientWidth,behavior:reduced.matches?'instant':'smooth'})}
-function stop(){clearInterval(timer);timer=null;play.textContent='เล่นอัตโนมัติ';play.setAttribute('aria-pressed','false')}
-track.addEventListener('scroll',()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{current=Math.round(track.scrollLeft/track.clientWidth);update()})});
-document.querySelector('.prev').onclick=()=>{stop();go(current-1)};document.querySelector('.next').onclick=()=>{stop();go(current+1)};
-track.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();stop();go(e.key==='Home'?0:e.key==='End'?19:current+(e.key==='ArrowRight'?1:-1))}});
-track.addEventListener('pointerdown',stop);play.onclick=()=>{if(timer){stop();return}play.textContent='หยุดอัตโนมัติ';play.setAttribute('aria-pressed','true');timer=setInterval(()=>go(current+1),5000)};
-document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
-let width=track.clientWidth;new ResizeObserver(()=>{if(track.clientWidth!==width){width=track.clientWidth;track.scrollTo({left:current*width,behavior:'instant'})}}).observe(track);update();
-</script></body></html>
+
+/* =====================================================
+   ตั้งค่ารูปตรงนี้อย่างเดียว
+===================================================== */
+
+const images = [
+  "BP01.jpg",
+  "BP02.jpg",
+  "BP03.jpg",
+  "BP04.jpg",
+  "BP05.jpg",
+  "BP06.jpg",
+  "BP07.jpg",
+  "BP08.jpg",
+  "BP09.jpg",
+  "BP10.jpg",
+  "BP11.jpg",
+  "BP12.jpg",
+  "BP13.jpg",
+  "BP14.jpg",
+  "BP15.jpg",
+  "BP16.jpg",
+  "BP17.jpg",
+  "BP18.jpg",
+  "BP19.jpg",
+  "BP20.jpg"
+];
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+// Auto Slide ทุก 5 วินาที
+const AUTO_SLIDE_TIME = 5000;
+
+// หลังผู้ใช้กดหรือปัด
+// รอ 10 วินาที ก่อนเริ่ม Auto Slide ใหม่
+const RESUME_TIME = 10000;
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+const slider =
+  document.getElementById("slider");
+
+const slidesContainer =
+  document.getElementById("slides");
+
+const dotsContainer =
+  document.getElementById("dots");
+
+const prevButton =
+  document.getElementById("prev");
+
+const nextButton =
+  document.getElementById("next");
+
+
+let currentIndex = 0;
+
+let autoSlideTimer;
+
+let resumeTimer;
+
+let touchStartX = 0;
+
+let touchStartY = 0;
+
+let touchEndX = 0;
+
+let touchEndY = 0;
+
+
+/* =====================================================
+   CREATE IMAGES
+===================================================== */
+
+images.forEach((image, index) => {
+
+  /* Slide */
+
+  const slide =
+    document.createElement("div");
+
+  slide.className = "slide";
+
+
+  const img =
+    document.createElement("img");
+
+  img.src = image;
+
+  img.alt =
+    "Wedding photo " + (index + 1);
+
+
+  /* โหลดรูปแรกทันที
+     รูปอื่น Lazy Load */
+
+  if (index === 0) {
+
+    img.loading = "eager";
+
+    img.fetchPriority = "high";
+
+  } else {
+
+    img.loading = "lazy";
+
+  }
+
+
+  slide.appendChild(img);
+
+  slidesContainer.appendChild(slide);
+
+
+  /* Dot */
+
+  const dot =
+    document.createElement("span");
+
+  dot.className = "dot";
+
+  dot.addEventListener(
+    "click",
+    function() {
+
+      goToSlide(index);
+
+      userInteraction();
+
+    }
+  );
+
+
+  dotsContainer.appendChild(dot);
+
+});
+
+
+/* =====================================================
+   UPDATE SLIDER
+===================================================== */
+
+function updateSlider() {
+
+  slidesContainer.style.transform =
+    `translateX(-${currentIndex * 100}%)`;
+
+
+  const dots =
+    document.querySelectorAll(".dot");
+
+
+  dots.forEach(
+    (dot, index) => {
+
+      dot.classList.toggle(
+        "active",
+        index === currentIndex
+      );
+
+    }
+  );
+
+
+  preloadNearbyImages();
+
+}
+
+
+/* =====================================================
+   GO TO SLIDE
+===================================================== */
+
+function goToSlide(index) {
+
+  if (index >= images.length) {
+
+    currentIndex = 0;
+
+  }
+
+  else if (index < 0) {
+
+    currentIndex =
+      images.length - 1;
+
+  }
+
+  else {
+
+    currentIndex = index;
+
+  }
+
+
+  updateSlider();
+
+}
+
+
+/* =====================================================
+   NEXT / PREVIOUS
+===================================================== */
+
+function nextSlide() {
+
+  goToSlide(
+    currentIndex + 1
+  );
+
+}
+
+
+function previousSlide() {
+
+  goToSlide(
+    currentIndex - 1
+  );
+
+}
+
+
+/* =====================================================
+   BUTTON EVENTS
+===================================================== */
+
+nextButton.addEventListener(
+  "click",
+  function() {
+
+    nextSlide();
+
+    userInteraction();
+
+  }
+);
+
+
+prevButton.addEventListener(
+  "click",
+  function() {
+
+    previousSlide();
+
+    userInteraction();
+
+  }
+);
+
+
+/* =====================================================
+   AUTO SLIDE
+===================================================== */
+
+function startAutoSlide() {
+
+  stopAutoSlide();
+
+
+  autoSlideTimer =
+    setInterval(
+      nextSlide,
+      AUTO_SLIDE_TIME
+    );
+
+}
+
+
+function stopAutoSlide() {
+
+  clearInterval(
+    autoSlideTimer
+  );
+
+}
+
+
+/* =====================================================
+   USER INTERACTION
+===================================================== */
+
+function userInteraction() {
+
+  stopAutoSlide();
+
+
+  clearTimeout(
+    resumeTimer
+  );
+
+
+  resumeTimer =
+    setTimeout(
+      startAutoSlide,
+      RESUME_TIME
+    );
+
+}
+
+
+/* =====================================================
+   TOUCH / SWIPE
+===================================================== */
+
+slider.addEventListener(
+  "touchstart",
+  function(event) {
+
+    touchStartX =
+      event.changedTouches[0].screenX;
+
+    touchStartY =
+      event.changedTouches[0].screenY;
+
+    stopAutoSlide();
+
+  },
+  { passive: true }
+);
+
+
+slider.addEventListener(
+  "touchend",
+  function(event) {
+
+    touchEndX =
+      event.changedTouches[0].screenX;
+
+    touchEndY =
+      event.changedTouches[0].screenY;
+
+
+    handleSwipe();
+
+  },
+  { passive: true }
+);
+
+
+function handleSwipe() {
+
+  const diffX =
+    touchStartX - touchEndX;
+
+  const diffY =
+    touchStartY - touchEndY;
+
+
+  /*
+    เช็กว่าเป็นการปัดแนวนอนจริง ๆ
+    เพื่อไม่ให้รบกวนการ Scroll หน้า Canva
+  */
+
+  if (
+    Math.abs(diffX) >
+    Math.abs(diffY)
+  ) {
+
+    if (diffX > 45) {
+
+      nextSlide();
+
+    }
+
+    else if (diffX < -45) {
+
+      previousSlide();
+
+    }
+
+  }
+
+
+  userInteraction();
+
+}
+
+
+/* =====================================================
+   KEYBOARD SUPPORT
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "ArrowRight") {
+
+      nextSlide();
+
+      userInteraction();
+
+    }
+
+
+    if (event.key === "ArrowLeft") {
+
+      previousSlide();
+
+      userInteraction();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   PRELOAD
+   โหลดรูปข้างหน้า/ข้างหลังไว้ก่อน
+===================================================== */
+
+function preloadNearbyImages() {
+
+  const nextIndex =
+    (currentIndex + 1)
+    % images.length;
+
+
+  const previousIndex =
+    (
+      currentIndex - 1
+      + images.length
+    )
+    % images.length;
+
+
+  [
+    images[nextIndex],
+    images[previousIndex]
+  ]
+  .forEach(
+    function(src) {
+
+      const image =
+        new Image();
+
+      image.src = src;
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   PAUSE WHEN TAB NOT ACTIVE
+===================================================== */
+
+document.addEventListener(
+  "visibilitychange",
+  function() {
+
+    if (document.hidden) {
+
+      stopAutoSlide();
+
+    }
+
+    else {
+
+      startAutoSlide();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   START
+===================================================== */
+
+updateSlider();
+
+startAutoSlide();
+
+</script>
+
+</body>
+</html>
+```

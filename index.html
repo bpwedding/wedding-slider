@@ -162,17 +162,27 @@ body {
   inset: 0;
   width: 100%;
   height: 100%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   opacity: 0;
   visibility: hidden;
-  transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+  transition:
+    opacity 1.15s ease-in-out,
+    visibility 0s linear 1.15s;
+
+  z-index: 0;
 }
 
 .slide.active {
   opacity: 1;
   visibility: visible;
+  transition:
+    opacity 1.15s ease-in-out,
+    visibility 0s linear 0s;
+
   z-index: 1;
 }
 
@@ -384,47 +394,6 @@ body {
 }
 
 
-
-/* =========================
-   MUSIC
-========================= */
-
-.music-control {
-  text-align: center;
-  margin: 0 0 22px;
-}
-
-.music-button {
-  padding: 10px 18px;
-  border: 1px solid #837970;
-  background: rgba(250,248,245,0.92);
-  color: #514a44;
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  letter-spacing: 2px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.music-button:hover {
-  background: #514a44;
-  color: white;
-}
-
-.music-button:disabled {
-  opacity: 0.55;
-  cursor: default;
-}
-
-.youtube-audio-player {
-  position: fixed;
-  width: 200px;
-  height: 200px;
-  left: -9999px;
-  top: -9999px;
-  overflow: hidden;
-}
-
 /* =========================
    MOBILE
 ========================= */
@@ -483,6 +452,165 @@ body {
 
 }
 
+
+/* =========================
+   CLEAN GALLERY PROGRESS
+========================= */
+
+.dots {
+  display: none !important;
+}
+
+.gallery-progress {
+  width: min(240px, 58vw);
+  height: 2px;
+  margin: 13px auto 0;
+  background: rgba(81, 74, 68, 0.18);
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+.gallery-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: currentColor;
+  opacity: 0.72;
+  border-radius: inherit;
+  transition: width 0.65s ease;
+}
+
+
+/* =========================
+   BURGUNDY + CREAM THEME
+========================= */
+
+:root {
+  --burgundy: #7A1F2B;
+  --cream: #F7F0E6;
+  --cream-soft: #FBF7F0;
+}
+
+/* Main page */
+html,
+body {
+  background: var(--cream) !important;
+  color: var(--burgundy) !important;
+}
+
+/* Main text / headings / labels */
+.logo,
+.subtitle,
+.counter,
+.gallery-counter,
+.footer,
+.footer-message,
+.music-control,
+.gallery-progress {
+  color: var(--burgundy) !important;
+}
+
+/* Music button */
+.music-button {
+  border-color: var(--burgundy) !important;
+  background: rgba(247, 240, 230, 0.94) !important;
+  color: var(--burgundy) !important;
+}
+
+.music-button:hover {
+  background: var(--burgundy) !important;
+  color: var(--cream-soft) !important;
+}
+
+/* Navigation arrows */
+.arrow {
+  background: rgba(122, 31, 43, 0.72) !important;
+  color: var(--cream-soft) !important;
+}
+
+.arrow:hover {
+  background: var(--burgundy) !important;
+}
+
+/* Progress bar */
+.gallery-progress {
+  background: rgba(122, 31, 43, 0.18) !important;
+}
+
+.gallery-progress-bar {
+  background: var(--burgundy) !important;
+  opacity: 0.88 !important;
+}
+
+/* Any remaining decorative text */
+a,
+button {
+  color: var(--burgundy);
+}
+
+
+/* =========================
+   YOUTUBE MUSIC
+========================= */
+.music-control {
+  text-align: center;
+  margin: 0 0 22px;
+  color: var(--burgundy);
+}
+.music-button {
+  padding: 10px 18px;
+  border: 1px solid var(--burgundy);
+  background: rgba(247,240,230,.94);
+  color: var(--burgundy);
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.music-button:hover {
+  background: var(--burgundy);
+  color: var(--cream-soft);
+}
+.youtube-audio-player {
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  left: -9999px;
+  top: -9999px;
+  overflow: hidden;
+}
+
+
+/* =========================
+   SOFT MONOCHROME CONTROLS
+========================= */
+
+/* Left / right navigation: translucent black with soft white arrow */
+.arrow {
+  background: rgba(0, 0, 0, 0.22) !important;
+  color: rgba(255, 255, 255, 0.82) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+}
+
+.arrow:hover {
+  background: rgba(0, 0, 0, 0.34) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Image counter: subtle monochrome pill for readability on any photo */
+.counter,
+.gallery-counter {
+  color: rgba(255, 255, 255, 0.86) !important;
+  background: rgba(0, 0, 0, 0.24) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 999px !important;
+  padding: 6px 10px !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
 </style>
 </head>
 
@@ -520,7 +648,6 @@ body {
   <!-- =====================
        MUSIC
   ====================== -->
-
   <div class="music-control">
     <button class="music-button" id="musicButton" type="button">
       ♪ PLAY MUSIC
@@ -530,7 +657,6 @@ body {
   <div class="youtube-audio-player" aria-hidden="true">
     <div id="youtubePlayer"></div>
   </div>
-
 
   <!-- =====================
        GALLERY
@@ -576,6 +702,9 @@ body {
         id="counter">
         01 / 20
       </div>
+  <div class="gallery-progress" aria-hidden="true">
+    <div class="gallery-progress-bar" id="galleryProgressBar"></div>
+  </div>
 
     </div>
 
@@ -617,95 +746,72 @@ body {
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-
-/* ==============================================
-   0. MUSIC
-============================================== */
-
 const YOUTUBE_VIDEO_ID = "KZIxYD2LWCI";
-
 let youtubePlayer;
 let musicPlaying = false;
 let youtubeReady = false;
 
-const musicButton =
-document.getElementById("musicButton");
+const musicButton = document.getElementById("musicButton");
 
 function onYouTubeIframeAPIReady() {
-
-  youtubePlayer = new YT.Player(
-    "youtubePlayer",
-    {
-      height: "200",
-      width: "200",
-      videoId: YOUTUBE_VIDEO_ID,
-
-      playerVars: {
-        autoplay: 0,
-        controls: 0,
-        disablekb: 1,
-        fs: 0,
-        playsinline: 1,
-        rel: 0,
-        loop: 1,
-        playlist: YOUTUBE_VIDEO_ID,
-        origin: window.location.origin
+  youtubePlayer = new YT.Player("youtubePlayer", {
+    height: "200",
+    width: "200",
+    videoId: YOUTUBE_VIDEO_ID,
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      disablekb: 1,
+      fs: 0,
+      playsinline: 1,
+      rel: 0,
+      loop: 1,
+      playlist: YOUTUBE_VIDEO_ID,
+      origin: window.location.origin
+    },
+    events: {
+      onReady: function() {
+        youtubeReady = true;
+        musicButton.textContent = "♪ PLAY MUSIC";
       },
-
-      events: {
-        onReady: function() {
-          youtubeReady = true;
-          musicButton.textContent = "♪ PLAY MUSIC";
-        },
-
-        onStateChange: function(event) {
-          if (event.data === YT.PlayerState.PLAYING) {
-            musicPlaying = true;
-            musicButton.textContent = "❚❚ PAUSE MUSIC";
-          }
-
-          if (
-            event.data === YT.PlayerState.PAUSED ||
-            event.data === YT.PlayerState.ENDED
-          ) {
-            musicPlaying = false;
-            musicButton.textContent = "♪ PLAY MUSIC";
-          }
-        },
-
-        onError: function(event) {
-          musicPlaying = false;
-          musicButton.textContent = "MUSIC ERROR " + event.data;
-          console.error("YouTube Player Error:", event.data);
-        },
-
-        onAutoplayBlocked: function() {
-          musicPlaying = false;
-          musicButton.textContent = "♪ TAP TO PLAY MUSIC";
-          console.warn("YouTube playback was blocked by the browser.");
+      onStateChange: function(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+          musicPlaying = true;
+          musicButton.textContent = "❚❚ PAUSE MUSIC";
         }
+        if (event.data === YT.PlayerState.PAUSED ||
+            event.data === YT.PlayerState.ENDED) {
+          musicPlaying = false;
+          musicButton.textContent = "♪ PLAY MUSIC";
+        }
+      },
+      onError: function(event) {
+        musicPlaying = false;
+        musicButton.textContent = "MUSIC ERROR " + event.data;
+        console.error("YouTube Player Error:", event.data);
+      },
+      onAutoplayBlocked: function() {
+        musicPlaying = false;
+        musicButton.textContent = "♪ TAP TO PLAY MUSIC";
       }
     }
-  );
+  });
 }
 
-musicButton.addEventListener(
-  "click",
-  function() {
-    if (!youtubeReady || !youtubePlayer) {
-      musicButton.textContent = "MUSIC LOADING...";
-      return;
-    }
-
-    if (musicPlaying) {
-      youtubePlayer.pauseVideo();
-    }
-    else {
-      youtubePlayer.playVideo();
-    }
+musicButton.addEventListener("click", function() {
+  if (!youtubeReady || !youtubePlayer) {
+    musicButton.textContent = "MUSIC LOADING...";
+    return;
   }
-);
+  if (musicPlaying) {
+    youtubePlayer.pauseVideo();
+  } else {
+    youtubePlayer.playVideo();
+  }
+});
+</script>
 
+<script>
 
 /* ==============================================
    1. รูปภาพ
@@ -830,7 +936,7 @@ images.forEach(
   document.createElement("div");
 
   slide.className =
-  index === 0 ? "slide active" : "slide";
+  "slide";
 
 
   /* Create image */
@@ -905,12 +1011,21 @@ images.forEach(
 
 function updateSlider() {
 
+  /* Fade slides */
 
-  /* Fade between slides */
-  const slideElements = slidesContainer.querySelectorAll(".slide");
-  slideElements.forEach((slide, index) => {
-    slide.classList.toggle("active", index === currentIndex);
+  const slides =
+  document.querySelectorAll(".slide");
+
+  slides.forEach(
+  (slide, index) => {
+
+    slide.classList.toggle(
+      "active",
+      index === currentIndex
+    );
+
   });
+
 
   /* Update dots */
 
@@ -943,6 +1058,15 @@ function updateSlider() {
 
   counter.textContent =
   `${current} / ${total}`;
+
+  /* Update progress bar */
+  const progressBar =
+  document.getElementById("galleryProgressBar");
+
+  if (progressBar) {
+    progressBar.style.width =
+      `${((currentIndex + 1) / images.length) * 100}%`;
+  }
 
 
   /* Preload */

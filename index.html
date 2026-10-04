@@ -611,6 +611,46 @@ button {
   -webkit-backdrop-filter: blur(3px);
 }
 
+
+/* =========================
+   FULLSCREEN BUTTON
+========================= */
+.fullscreen-button {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 50%;
+  background: rgba(0,0,0,0.22);
+  color: rgba(255,255,255,0.86);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  font-size: 20px;
+  line-height: 1;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+.fullscreen-button:hover {
+  background: rgba(0,0,0,0.34);
+  color: rgba(255,255,255,0.98);
+  transform: scale(1.04);
+}
+.gallery:fullscreen,
+.gallery:-webkit-full-screen {
+  background: #000;
+}
+.gallery:fullscreen .slide img,
+.gallery:-webkit-full-screen .slide img {
+  object-fit: contain;
+}
+
 </style>
 </head>
 
@@ -703,6 +743,13 @@ button {
         01 / 20
       </div>
   <div class="gallery-progress" aria-hidden="true">
+    <button
+      class="fullscreen-button"
+      id="fullscreenButton"
+      type="button"
+      aria-label="Open fullscreen"
+      title="Fullscreen">⛶</button>
+
     <div class="gallery-progress-bar" id="galleryProgressBar"></div>
   </div>
 
@@ -1415,6 +1462,60 @@ updateSlider();
 
 startAutoSlide();
 
+</script>
+
+
+<script>
+/* =========================
+   FULLSCREEN
+========================= */
+const fullscreenButton = document.getElementById("fullscreenButton");
+const fullscreenGallery = fullscreenButton
+  ? fullscreenButton.closest(".gallery")
+  : null;
+
+async function toggleGalleryFullscreen() {
+  if (!fullscreenGallery) return;
+
+  try {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      if (fullscreenGallery.requestFullscreen) {
+        await fullscreenGallery.requestFullscreen();
+      } else if (fullscreenGallery.webkitRequestFullscreen) {
+        fullscreenGallery.webkitRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    }
+  } catch (error) {
+    console.warn("Fullscreen unavailable:", error);
+  }
+}
+
+if (fullscreenButton) {
+  fullscreenButton.addEventListener("click", toggleGalleryFullscreen);
+}
+
+function updateFullscreenButton() {
+  if (!fullscreenButton) return;
+  const isFullscreen =
+    document.fullscreenElement || document.webkitFullscreenElement;
+
+  fullscreenButton.textContent = isFullscreen ? "×" : "⛶";
+  fullscreenButton.setAttribute(
+    "aria-label",
+    isFullscreen ? "Exit fullscreen" : "Open fullscreen"
+  );
+  fullscreenButton.title =
+    isFullscreen ? "Exit fullscreen" : "Fullscreen";
+}
+
+document.addEventListener("fullscreenchange", updateFullscreenButton);
+document.addEventListener("webkitfullscreenchange", updateFullscreenButton);
 </script>
 
 </body>

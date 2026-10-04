@@ -152,29 +152,28 @@ body {
 ========================= */
 
 .slides {
+  position: relative;
   width: 100%;
   height: 100%;
-
-  display: flex;
-
-  transition:
-    transform
-    0.55s
-    cubic-bezier(.4,0,.2,1);
 }
 
 .slide {
-  flex:
-    0 0
-    100%;
-
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
 }
 
 .slide img {
@@ -831,7 +830,7 @@ images.forEach(
   document.createElement("div");
 
   slide.className =
-  "slide";
+  index === 0 ? "slide active" : "slide";
 
 
   /* Create image */
@@ -907,11 +906,11 @@ images.forEach(
 function updateSlider() {
 
 
-  /* Move slides */
-
-  slidesContainer.style.transform =
-  `translateX(-${currentIndex * 100}%)`;
-
+  /* Fade between slides */
+  const slideElements = slidesContainer.querySelectorAll(".slide");
+  slideElements.forEach((slide, index) => {
+    slide.classList.toggle("active", index === currentIndex);
+  });
 
   /* Update dots */
 

@@ -385,6 +385,47 @@ body {
 }
 
 
+
+/* =========================
+   MUSIC
+========================= */
+
+.music-control {
+  text-align: center;
+  margin: 0 0 22px;
+}
+
+.music-button {
+  padding: 10px 18px;
+  border: 1px solid #837970;
+  background: rgba(250,248,245,0.92);
+  color: #514a44;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.music-button:hover {
+  background: #514a44;
+  color: white;
+}
+
+.music-button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.youtube-audio-player {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  left: -9999px;
+  top: -9999px;
+  overflow: hidden;
+}
+
 /* =========================
    MOBILE
 ========================= */
@@ -476,6 +517,26 @@ body {
 
 
 
+
+  <!-- =====================
+       MUSIC
+  ====================== -->
+
+  <div class="music-control">
+    <button
+      class="music-button"
+      id="musicButton"
+      type="button">
+      ♪ PLAY MUSIC
+    </button>
+  </div>
+
+  <!-- YouTube player is kept off-screen; playback starts only after a user click/tap. -->
+  <div class="youtube-audio-player" aria-hidden="true">
+    <div id="youtubePlayer"></div>
+  </div>
+
+
   <!-- =====================
        GALLERY
   ====================== -->
@@ -558,7 +619,106 @@ body {
 
 
 
+<script src="https://www.youtube.com/iframe_api"></script>
+
 <script>
+
+/* ==============================================
+   0. MUSIC
+
+   ใส่ YouTube Video ID ตรง YOUTUBE_VIDEO_ID
+   ตัวอย่าง:
+   https://www.youtube.com/watch?v=dQw4w9WgXcQ
+   Video ID คือ dQw4w9WgXcQ
+============================================== */
+
+const YOUTUBE_VIDEO_ID = "KZIxYD2LWCI&t";
+
+let youtubePlayer;
+let musicPlaying = false;
+let youtubeReady = false;
+
+const musicButton =
+document.getElementById("musicButton");
+
+function onYouTubeIframeAPIReady() {
+
+  if (
+    !YOUTUBE_VIDEO_ID ||
+    YOUTUBE_VIDEO_ID === "PUT_YOUTUBE_VIDEO_ID_HERE"
+  ) {
+    musicButton.textContent = "♪ ADD YOUTUBE SONG";
+    musicButton.disabled = true;
+    return;
+  }
+
+  youtubePlayer = new YT.Player(
+    "youtubePlayer",
+    {
+      height: "1",
+      width: "1",
+      videoId: YOUTUBE_VIDEO_ID,
+
+      playerVars: {
+        autoplay: 0,
+        controls: 0,
+        disablekb: 1,
+        fs: 0,
+        playsinline: 1,
+        rel: 0,
+        loop: 1,
+        playlist: YOUTUBE_VIDEO_ID
+      },
+
+      events: {
+
+        onReady: function() {
+          youtubeReady = true;
+        },
+
+        onStateChange: function(event) {
+
+          if (event.data === YT.PlayerState.PLAYING) {
+            musicPlaying = true;
+            musicButton.textContent = "❚❚ PAUSE MUSIC";
+          }
+
+          if (
+            event.data === YT.PlayerState.PAUSED ||
+            event.data === YT.PlayerState.ENDED
+          ) {
+            musicPlaying = false;
+            musicButton.textContent = "♪ PLAY MUSIC";
+          }
+        },
+
+        onError: function() {
+          musicPlaying = false;
+          musicButton.textContent = "MUSIC UNAVAILABLE";
+          musicButton.disabled = true;
+        }
+      }
+    }
+  );
+}
+
+musicButton.addEventListener(
+  "click",
+  function() {
+
+    if (!youtubeReady || !youtubePlayer) {
+      return;
+    }
+
+    if (musicPlaying) {
+      youtubePlayer.pauseVideo();
+    }
+    else {
+      youtubePlayer.playVideo();
+    }
+  }
+);
+
 
 /* ==============================================
    1. รูปภาพ

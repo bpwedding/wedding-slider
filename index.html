@@ -419,8 +419,8 @@ body {
 
 .youtube-audio-player {
   position: fixed;
-  width: 1px;
-  height: 1px;
+  width: 200px;
+  height: 200px;
   left: -9999px;
   top: -9999px;
   overflow: hidden;
@@ -523,15 +523,11 @@ body {
   ====================== -->
 
   <div class="music-control">
-    <button
-      class="music-button"
-      id="musicButton"
-      type="button">
+    <button class="music-button" id="musicButton" type="button">
       ♪ PLAY MUSIC
     </button>
   </div>
 
-  <!-- YouTube player is kept off-screen; playback starts only after a user click/tap. -->
   <div class="youtube-audio-player" aria-hidden="true">
     <div id="youtubePlayer"></div>
   </div>
@@ -625,11 +621,6 @@ body {
 
 /* ==============================================
    0. MUSIC
-
-   ใส่ YouTube Video ID ตรง YOUTUBE_VIDEO_ID
-   ตัวอย่าง:
-   https://www.youtube.com/watch?v=dQw4w9WgXcQ
-   Video ID คือ dQw4w9WgXcQ
 ============================================== */
 
 const YOUTUBE_VIDEO_ID = "KZIxYD2LWCI";
@@ -643,20 +634,11 @@ document.getElementById("musicButton");
 
 function onYouTubeIframeAPIReady() {
 
-  if (
-    !YOUTUBE_VIDEO_ID ||
-    YOUTUBE_VIDEO_ID === "PUT_YOUTUBE_VIDEO_ID_HERE"
-  ) {
-    musicButton.textContent = "♪ ADD YOUTUBE SONG";
-    musicButton.disabled = true;
-    return;
-  }
-
   youtubePlayer = new YT.Player(
     "youtubePlayer",
     {
-      height: "1",
-      width: "1",
+      height: "200",
+      width: "200",
       videoId: YOUTUBE_VIDEO_ID,
 
       playerVars: {
@@ -667,17 +649,17 @@ function onYouTubeIframeAPIReady() {
         playsinline: 1,
         rel: 0,
         loop: 1,
-        playlist: YOUTUBE_VIDEO_ID
+        playlist: YOUTUBE_VIDEO_ID,
+        origin: window.location.origin
       },
 
       events: {
-
         onReady: function() {
           youtubeReady = true;
+          musicButton.textContent = "♪ PLAY MUSIC";
         },
 
         onStateChange: function(event) {
-
           if (event.data === YT.PlayerState.PLAYING) {
             musicPlaying = true;
             musicButton.textContent = "❚❚ PAUSE MUSIC";
@@ -692,10 +674,16 @@ function onYouTubeIframeAPIReady() {
           }
         },
 
-        onError: function() {
+        onError: function(event) {
           musicPlaying = false;
-          musicButton.textContent = "MUSIC UNAVAILABLE";
-          musicButton.disabled = true;
+          musicButton.textContent = "MUSIC ERROR " + event.data;
+          console.error("YouTube Player Error:", event.data);
+        },
+
+        onAutoplayBlocked: function() {
+          musicPlaying = false;
+          musicButton.textContent = "♪ TAP TO PLAY MUSIC";
+          console.warn("YouTube playback was blocked by the browser.");
         }
       }
     }
@@ -705,8 +693,8 @@ function onYouTubeIframeAPIReady() {
 musicButton.addEventListener(
   "click",
   function() {
-
     if (!youtubeReady || !youtubePlayer) {
+      musicButton.textContent = "MUSIC LOADING...";
       return;
     }
 

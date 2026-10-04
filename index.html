@@ -833,6 +833,83 @@ html:fullscreen .fullscreen-button {
   left: 18px !important;
 }
 
+
+/* =========================
+   iPHONE FULLSCREEN-LIKE MODE
+========================= */
+html.ios-gallery-viewer,
+body.ios-gallery-viewer {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  background: #000 !important;
+}
+
+body.ios-gallery-viewer #slider {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  z-index: 2147483647 !important;
+  overflow: hidden !important;
+}
+
+body.ios-gallery-viewer #slider .slides,
+body.ios-gallery-viewer #slider .slide {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body.ios-gallery-viewer #slider .slide {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+body.ios-gallery-viewer #slider .slide img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100vw !important;
+  max-height: 100dvh !important;
+  object-fit: contain !important;
+}
+
+body.ios-gallery-viewer #slider .fullscreen-button {
+  position: fixed !important;
+  top: max(14px, env(safe-area-inset-top)) !important;
+  left: max(14px, env(safe-area-inset-left)) !important;
+  z-index: 2147483647 !important;
+}
+
+body.ios-gallery-viewer #slider .arrow {
+  z-index: 2147483647 !important;
+}
+
+body.ios-gallery-viewer #slider .counter,
+body.ios-gallery-viewer #slider .gallery-counter {
+  z-index: 2147483647 !important;
+}
+
+/* Keep controls clear of iPhone notch / Home indicator */
+body.ios-gallery-viewer #slider .prev {
+  left: max(12px, env(safe-area-inset-left)) !important;
+}
+body.ios-gallery-viewer #slider .next {
+  right: max(12px, env(safe-area-inset-right)) !important;
+}
+
 </style>
 </head>
 
@@ -1649,10 +1726,18 @@ startAutoSlide();
 
 <script>
 /* =========================
-   GALLERY-ONLY FULLSCREEN
+   HYBRID GALLERY FULLSCREEN
+   Native: Windows / Android / iPad where supported
+   Viewer fallback: iPhone
 ========================= */
 const fullscreenButton = document.getElementById("fullscreenButton");
 const fullscreenGallery = document.getElementById("slider");
+
+let iosViewerMode = false;
+
+function isIPhone() {
+  return /iPhone|iPod/i.test(navigator.userAgent);
+}
 
 function setFullscreenButton(isFullscreen) {
   if (!fullscreenButton) return;
@@ -1665,9 +1750,37 @@ function setFullscreenButton(isFullscreen) {
     isFullscreen ? "Exit fullscreen" : "Fullscreen";
 }
 
+function enterIOSViewer() {
+  iosViewerMode = true;
+  document.documentElement.classList.add("ios-gallery-viewer");
+  document.body.classList.add("ios-gallery-viewer");
+  setFullscreenButton(true);
+
+  /* Scroll to top to encourage Safari's compact browser chrome */
+  window.scrollTo(0, 1);
+}
+
+function exitIOSViewer() {
+  iosViewerMode = false;
+  document.documentElement.classList.remove("ios-gallery-viewer");
+  document.body.classList.remove("ios-gallery-viewer");
+  setFullscreenButton(false);
+}
+
 async function toggleGalleryFullscreen() {
   if (!fullscreenGallery) return;
 
+  /* iPhone: use dedicated viewport-filling viewer */
+  if (isIPhone()) {
+    if (iosViewerMode) {
+      exitIOSViewer();
+    } else {
+      enterIOSViewer();
+    }
+    return;
+  }
+
+  /* Other supported browsers: native fullscreen */
   try {
     if (document.fullscreenElement) {
       await document.exitFullscreen();
@@ -1678,9 +1791,17 @@ async function toggleGalleryFullscreen() {
       await fullscreenGallery.requestFullscreen({
         navigationUI: "hide"
       });
+      return;
     }
   } catch (err) {
-    console.error("Gallery fullscreen failed:", err);
+    console.warn("Native fullscreen unavailable; using viewer mode.", err);
+  }
+
+  /* Generic fallback if native fullscreen is blocked */
+  if (iosViewerMode) {
+    exitIOSViewer();
+  } else {
+    enterIOSViewer();
   }
 }
 
@@ -1689,11 +1810,19 @@ if (fullscreenButton) {
 }
 
 document.addEventListener("fullscreenchange", function () {
-  setFullscreenButton(document.fullscreenElement === fullscreenGallery);
+  if (!iosViewerMode) {
+    setFullscreenButton(document.fullscreenElement === fullscreenGallery);
+  }
 });
 
 document.addEventListener("fullscreenerror", function (event) {
   console.error("Fullscreen API error:", event);
+});
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape" && iosViewerMode) {
+    exitIOSViewer();
+  }
 });
 </script>
 

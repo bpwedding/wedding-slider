@@ -4,201 +4,444 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>B & P Wedding Gallery</title>
+<title>B & P | Our Gallery</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+/* =========================
+   GENERAL
+========================= */
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  background: #faf8f5;
+  color: #403a36;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  min-height: 100vh;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page {
+  width: 100%;
+  max-width: 1000px;
+
+  margin: auto;
+
+  padding:
+    45px
+    20px
+    35px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+  text-align: center;
+
+  margin-bottom: 28px;
+}
+
+.logo {
+  font-size: 38px;
+
+  font-style: italic;
+
+  letter-spacing: 3px;
+
+  margin-bottom: 8px;
+}
+
+.line {
+  width: 55px;
+  height: 1px;
+
+  background: #a69b91;
+
+  margin:
+    12px
+    auto
+    18px;
+}
+
+.title {
+  font-size: 18px;
+
+  letter-spacing: 6px;
+
+  font-weight: normal;
+
+  margin: 0;
+}
+
+.subtitle {
+  margin-top: 12px;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 13px;
+
+  letter-spacing: 1px;
+
+  color: #888078;
+}
+
+
+/* =========================
+   SLIDER
+========================= */
+
+.slider-wrapper {
+  width: 100%;
+
+  max-width: 900px;
+
+  margin: auto;
+
+  position: relative;
+}
+
+.slider {
+  position: relative;
+
+  width: 100%;
+
+  /*
+    เปลี่ยนตรงนี้ได้
+    16 / 10 = ค่อนข้างเหมาะกับรูป Wedding
+  */
+
+  aspect-ratio: 16 / 10;
+
+  overflow: hidden;
+
+  background: #eeeae5;
+
+  border-radius: 4px;
+
+  box-shadow:
+    0 8px 30px
+    rgba(0,0,0,0.08);
+
+  touch-action: pan-y;
+
+  user-select: none;
+}
+
+
+/* =========================
+   SLIDES
+========================= */
+
+.slides {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  transition:
+    transform
+    0.55s
+    cubic-bezier(.4,0,.2,1);
+}
+
+.slide {
+  flex:
+    0 0
+    100%;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  display: block;
+
+  pointer-events: none;
+
+  -webkit-user-drag: none;
+}
+
+
+/* =========================
+   ARROWS
+========================= */
+
+.arrow {
+  position: absolute;
+
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+
+  width: 45px;
+  height: 45px;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background:
+    rgba(0,0,0,0.28);
+
+  color: white;
+
+  font-size: 24px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 10;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.arrow:hover {
+  background:
+    rgba(0,0,0,0.5);
+}
+
+.arrow:active {
+  transform:
+    translateY(-50%)
+    scale(0.92);
+}
+
+.prev {
+  left: 15px;
+}
+
+.next {
+  right: 15px;
+}
+
+
+/* =========================
+   COUNTER
+========================= */
+
+.counter {
+  position: absolute;
+
+  top: 15px;
+  right: 15px;
+
+  padding:
+    6px
+    11px;
+
+  border-radius: 20px;
+
+  background:
+    rgba(0,0,0,0.30);
+
+  color: white;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 12px;
+
+  letter-spacing: 1px;
+
+  z-index: 10;
+}
+
+
+/* =========================
+   DOTS
+========================= */
+
+.dots {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  margin-top: 18px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #d2cbc4;
+
+  cursor: pointer;
+
+  transition:
+    all
+    0.25s ease;
+}
+
+.dot.active {
+  background: #514a44;
+
+  transform:
+    scale(1.4);
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+  text-align: center;
+
+  margin-top: 32px;
+}
+
+.message {
+  font-style: italic;
+
+  font-size: 15px;
+
+  color: #7b7169;
+
+  margin-bottom: 25px;
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+  display: inline-block;
+
+  padding:
+    12px
+    24px;
+
+  border:
+    1px solid
+    #837970;
+
+  color: #514a44;
+
+  text-decoration: none;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 11px;
+
+  letter-spacing: 2px;
+
+  transition:
+    all
+    0.25s ease;
+}
+
+.back-button:hover {
+  background: #514a44;
+
+  color: white;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media
+(max-width: 600px) {
+
+  .page {
+    padding:
+      30px
+      12px
+      25px;
   }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: transparent;
+  .logo {
+    font-size: 31px;
   }
 
-  body {
-    font-family: Arial, sans-serif;
+  .title {
+    font-size: 15px;
+
+    letter-spacing: 4px;
   }
 
-  /* ==============================
-     MAIN SLIDER
-  ============================== */
+  .subtitle {
+    font-size: 11px;
+  }
 
   .slider {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    background: transparent;
-    user-select: none;
-    touch-action: pan-y;
+    /*
+      มือถือให้รูปใหญ่ขึ้น
+    */
+
+    aspect-ratio: 4 / 5;
   }
-
-  .slides {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.55s ease;
-  }
-
-  .slide {
-    flex: 0 0 100%;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-    display: block;
-
-    /* ป้องกันการลากรูป */
-    pointer-events: none;
-    -webkit-user-drag: none;
-  }
-
-
-  /* ==============================
-     ARROWS
-  ============================== */
 
   .arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
 
-    width: 44px;
-    height: 44px;
-
-    border: none;
-    border-radius: 50%;
-
-    background: rgba(0, 0, 0, 0.28);
-    color: white;
-
-    font-size: 25px;
-    font-weight: 300;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-
-    z-index: 20;
-
-    transition:
-      background 0.25s ease,
-      transform 0.25s ease;
-  }
-
-  .arrow:hover {
-    background: rgba(0, 0, 0, 0.50);
-  }
-
-  .arrow:active {
-    transform: translateY(-50%) scale(0.92);
+    font-size: 20px;
   }
 
   .prev {
-    left: 16px;
+    left: 8px;
   }
 
   .next {
-    right: 16px;
+    right: 8px;
   }
 
-
-  /* ==============================
-     DOTS
-  ============================== */
-
-  .dots {
-    position: absolute;
-
-    left: 50%;
-    bottom: 16px;
-
-    transform: translateX(-50%);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    padding: 7px 11px;
-
-    border-radius: 20px;
-
-    background: rgba(0, 0, 0, 0.15);
-
-    z-index: 20;
+  .counter {
+    top: 10px;
+    right: 10px;
   }
 
-  .dot {
-    width: 7px;
-    height: 7px;
-
-    border-radius: 50%;
-
-    background: rgba(255, 255, 255, 0.55);
-
-    cursor: pointer;
-
-    transition:
-      transform 0.25s ease,
-      background 0.25s ease;
-  }
-
-  .dot.active {
-    background: white;
-    transform: scale(1.35);
-  }
-
-
-  /* ==============================
-     MOBILE
-  ============================== */
-
-  @media (max-width: 600px) {
-
-    .arrow {
-      width: 38px;
-      height: 38px;
-
-      font-size: 22px;
-    }
-
-    .prev {
-      left: 10px;
-    }
-
-    .next {
-      right: 10px;
-    }
-
-    .dots {
-      bottom: 10px;
-      gap: 5px;
-      padding: 6px 9px;
-    }
-
-    .dot {
-      width: 6px;
-      height: 6px;
-    }
-  }
+}
 
 </style>
 </head>
@@ -206,144 +449,274 @@
 
 <body>
 
-<div class="slider" id="slider">
+<div class="page">
 
-  <div class="slides" id="slides"></div>
 
-  <button
-    class="arrow prev"
-    id="prev"
-    aria-label="Previous image">
-    &#10094;
-  </button>
+  <!-- =====================
+       HEADER
+  ====================== -->
 
-  <button
-    class="arrow next"
-    id="next"
-    aria-label="Next image">
-    &#10095;
-  </button>
+  <header class="header">
 
-  <div
-    class="dots"
-    id="dots">
-  </div>
+    <div class="logo">
+      B &amp; P
+    </div>
+
+    <div class="line"></div>
+
+    <h1 class="title">
+      OUR GALLERY
+    </h1>
+
+    <div class="subtitle">
+      Our favorite moments together
+    </div>
+
+  </header>
+
+
+
+  <!-- =====================
+       GALLERY
+  ====================== -->
+
+  <main class="slider-wrapper">
+
+    <div
+      class="slider"
+      id="slider"
+    >
+
+      <div
+        class="slides"
+        id="slides">
+      </div>
+
+
+      <!-- Previous -->
+
+      <button
+        class="arrow prev"
+        id="prev"
+        aria-label="Previous photo">
+        &#10094;
+      </button>
+
+
+      <!-- Next -->
+
+      <button
+        class="arrow next"
+        id="next"
+        aria-label="Next photo">
+        &#10095;
+      </button>
+
+
+      <!-- Counter -->
+
+      <div
+        class="counter"
+        id="counter">
+        01 / 20
+      </div>
+
+    </div>
+
+
+    <!-- Dots -->
+
+    <div
+      class="dots"
+      id="dots">
+    </div>
+
+  </main>
+
+
+
+  <!-- =====================
+       FOOTER
+  ====================== -->
+
+  <footer class="footer">
+
+    <div class="message">
+      Until the end of time ♡
+    </div>
+
+    <a
+      class="back-button"
+      id="homeButton"
+      href="#">
+      ← BACK TO HOME
+    </a>
+
+  </footer>
 
 </div>
 
 
+
 <script>
 
-/* =====================================================
-   ตั้งค่ารูปตรงนี้อย่างเดียว
-===================================================== */
+/* ==============================================
+   1. รูปภาพ
+
+   เพิ่ม/ลดรูปตรงนี้ได้เลย
+============================================== */
 
 const images = [
+
   "BP01.JPG",
   "BP02.JPG",
   "BP03.JPG",
   "BP04.JPG",
   "BP05.JPG",
+
   "BP06.JPG",
   "BP07.JPG",
   "BP08.JPG",
   "BP09.JPG",
   "BP10.JPG",
+
   "BP11.JPG",
   "BP12.JPG",
   "BP13.JPG",
   "BP14.JPG",
   "BP15.JPG",
+
   "BP16.JPG",
   "BP17.JPG",
   "BP18.JPG",
   "BP19.JPG",
   "BP20.JPG"
+
 ];
 
 
-/* =====================================================
-   SETTINGS
-===================================================== */
+/* ==============================================
+   2. URL เว็บ Canva หลัก
+============================================== */
 
-// Auto Slide ทุก 5 วินาที
+const HOME_URL =
+"https://bpuntiltheendoftime.my.canva.site/bpwedding/page-2";
+
+
+/* ==============================================
+   3. Auto Slide
+
+   5000 = 5 วินาที
+============================================== */
+
 const AUTO_SLIDE_TIME = 5000;
 
-// หลังผู้ใช้กดหรือปัด
-// รอ 10 วินาที ก่อนเริ่ม Auto Slide ใหม่
+
+/*
+  เมื่อแขกปัด/กดรูปเอง
+  รอ 10 วินาทีแล้วค่อย Auto Slide ต่อ
+*/
+
 const RESUME_TIME = 10000;
 
 
-/* =====================================================
-   VARIABLES
-===================================================== */
+/* ==============================================
+   ELEMENTS
+============================================== */
 
 const slider =
-  document.getElementById("slider");
+document.getElementById("slider");
 
 const slidesContainer =
-  document.getElementById("slides");
+document.getElementById("slides");
 
 const dotsContainer =
-  document.getElementById("dots");
+document.getElementById("dots");
 
-const prevButton =
-  document.getElementById("prev");
+const counter =
+document.getElementById("counter");
 
-const nextButton =
-  document.getElementById("next");
+const prev =
+document.getElementById("prev");
 
+const next =
+document.getElementById("next");
+
+const homeButton =
+document.getElementById("homeButton");
+
+
+homeButton.href =
+HOME_URL;
+
+
+/* ==============================================
+   VARIABLES
+============================================== */
 
 let currentIndex = 0;
 
-let autoSlideTimer;
+let autoTimer;
 
 let resumeTimer;
 
-let touchStartX = 0;
+let startX = 0;
 
-let touchStartY = 0;
+let startY = 0;
 
-let touchEndX = 0;
+let endX = 0;
 
-let touchEndY = 0;
+let endY = 0;
 
 
-/* =====================================================
-   CREATE IMAGES
-===================================================== */
+/* ==============================================
+   CREATE SLIDES
+============================================== */
 
-images.forEach((image, index) => {
+images.forEach(
+(image, index) => {
 
-  /* Slide */
+
+  /* Create slide */
 
   const slide =
-    document.createElement("div");
+  document.createElement("div");
 
-  slide.className = "slide";
+  slide.className =
+  "slide";
 
+
+  /* Create image */
 
   const img =
-    document.createElement("img");
+  document.createElement("img");
 
-  img.src = image;
+  img.src =
+  image;
 
   img.alt =
-    "Wedding photo " + (index + 1);
+  `B & P Wedding Photo ${index + 1}`;
 
 
-  /* โหลดรูปแรกทันที
-     รูปอื่น Lazy Load */
+  /*
+    รูปแรกโหลดทันที
+    รูปอื่น Lazy Load
+  */
 
   if (index === 0) {
 
-    img.loading = "eager";
+    img.loading =
+    "eager";
 
-    img.fetchPriority = "high";
+    img.fetchPriority =
+    "high";
 
-  } else {
+  }
 
-    img.loading = "lazy";
+  else {
+
+    img.loading =
+    "lazy";
 
   }
 
@@ -353,23 +726,25 @@ images.forEach((image, index) => {
   slidesContainer.appendChild(slide);
 
 
-  /* Dot */
+
+  /* Create dot */
 
   const dot =
-    document.createElement("span");
+  document.createElement("span");
 
-  dot.className = "dot";
+  dot.className =
+  "dot";
+
 
   dot.addEventListener(
-    "click",
-    function() {
+  "click",
+  () => {
 
-      goToSlide(index);
+    goToSlide(index);
 
-      userInteraction();
+    userInteraction();
 
-    }
-  );
+  });
 
 
   dotsContainer.appendChild(dot);
@@ -377,59 +752,86 @@ images.forEach((image, index) => {
 });
 
 
-/* =====================================================
-   UPDATE SLIDER
-===================================================== */
+/* ==============================================
+   UPDATE
+============================================== */
 
 function updateSlider() {
 
-  slidesContainer.style.transform =
-    `translateX(-${currentIndex * 100}%)`;
 
+  /* Move slides */
+
+  slidesContainer.style.transform =
+  `translateX(-${currentIndex * 100}%)`;
+
+
+  /* Update dots */
 
   const dots =
-    document.querySelectorAll(".dot");
+  document.querySelectorAll(".dot");
 
 
   dots.forEach(
-    (dot, index) => {
+  (dot, index) => {
 
-      dot.classList.toggle(
-        "active",
-        index === currentIndex
-      );
+    dot.classList.toggle(
+    "active",
+    index === currentIndex
+    );
 
-    }
-  );
+  });
 
+
+  /* Update counter */
+
+  const current =
+  String(currentIndex + 1)
+  .padStart(2, "0");
+
+
+  const total =
+  String(images.length)
+  .padStart(2, "0");
+
+
+  counter.textContent =
+  `${current} / ${total}`;
+
+
+  /* Preload */
 
   preloadNearbyImages();
 
 }
 
 
-/* =====================================================
+/* ==============================================
    GO TO SLIDE
-===================================================== */
+============================================== */
 
 function goToSlide(index) {
 
-  if (index >= images.length) {
+  if (
+    index >= images.length
+  ) {
 
     currentIndex = 0;
 
   }
 
-  else if (index < 0) {
+  else if (
+    index < 0
+  ) {
 
     currentIndex =
-      images.length - 1;
+    images.length - 1;
 
   }
 
   else {
 
-    currentIndex = index;
+    currentIndex =
+    index;
 
   }
 
@@ -439,70 +841,72 @@ function goToSlide(index) {
 }
 
 
-/* =====================================================
-   NEXT / PREVIOUS
-===================================================== */
+/* ==============================================
+   NEXT
+============================================== */
 
 function nextSlide() {
 
   goToSlide(
-    currentIndex + 1
+  currentIndex + 1
   );
 
 }
 
+
+/* ==============================================
+   PREVIOUS
+============================================== */
 
 function previousSlide() {
 
   goToSlide(
-    currentIndex - 1
+  currentIndex - 1
   );
 
 }
 
 
-/* =====================================================
-   BUTTON EVENTS
-===================================================== */
+/* ==============================================
+   BUTTONS
+============================================== */
 
-nextButton.addEventListener(
-  "click",
-  function() {
+next.addEventListener(
+"click",
+() => {
 
-    nextSlide();
+  nextSlide();
 
-    userInteraction();
+  userInteraction();
 
-  }
-);
-
-
-prevButton.addEventListener(
-  "click",
-  function() {
-
-    previousSlide();
-
-    userInteraction();
-
-  }
-);
+});
 
 
-/* =====================================================
+prev.addEventListener(
+"click",
+() => {
+
+  previousSlide();
+
+  userInteraction();
+
+});
+
+
+/* ==============================================
    AUTO SLIDE
-===================================================== */
+============================================== */
 
 function startAutoSlide() {
 
   stopAutoSlide();
 
 
-  autoSlideTimer =
-    setInterval(
-      nextSlide,
-      AUTO_SLIDE_TIME
-    );
+  autoTimer =
+  setInterval(
+  nextSlide,
+  AUTO_SLIDE_TIME
+  );
 
 }
 
@@ -510,100 +914,113 @@ function startAutoSlide() {
 function stopAutoSlide() {
 
   clearInterval(
-    autoSlideTimer
+  autoTimer
   );
 
 }
 
 
-/* =====================================================
+/* ==============================================
    USER INTERACTION
-===================================================== */
+============================================== */
 
 function userInteraction() {
 
   stopAutoSlide();
 
-
   clearTimeout(
-    resumeTimer
+  resumeTimer
   );
 
 
   resumeTimer =
-    setTimeout(
-      startAutoSlide,
-      RESUME_TIME
-    );
+  setTimeout(
+  startAutoSlide,
+  RESUME_TIME
+  );
 
 }
 
 
-/* =====================================================
-   TOUCH / SWIPE
-===================================================== */
+/* ==============================================
+   SWIPE
+============================================== */
 
 slider.addEventListener(
-  "touchstart",
-  function(event) {
+"touchstart",
+event => {
 
-    touchStartX =
-      event.changedTouches[0].screenX;
+  startX =
+  event.changedTouches[0].screenX;
 
-    touchStartY =
-      event.changedTouches[0].screenY;
+  startY =
+  event.changedTouches[0].screenY;
 
-    stopAutoSlide();
+  stopAutoSlide();
 
-  },
-  { passive: true }
+},
+{ passive: true }
 );
 
 
 slider.addEventListener(
-  "touchend",
-  function(event) {
+"touchend",
+event => {
 
-    touchEndX =
-      event.changedTouches[0].screenX;
+  endX =
+  event.changedTouches[0].screenX;
 
-    touchEndY =
-      event.changedTouches[0].screenY;
+  endY =
+  event.changedTouches[0].screenY;
 
+  handleSwipe();
 
-    handleSwipe();
-
-  },
-  { passive: true }
+},
+{ passive: true }
 );
 
 
 function handleSwipe() {
 
   const diffX =
-    touchStartX - touchEndX;
+  startX - endX;
 
   const diffY =
-    touchStartY - touchEndY;
+  startY - endY;
 
 
   /*
-    เช็กว่าเป็นการปัดแนวนอนจริง ๆ
-    เพื่อไม่ให้รบกวนการ Scroll หน้า Canva
+    ต้องเป็นการปัดแนวนอน
+    มากกว่าแนวตั้ง
   */
 
   if (
-    Math.abs(diffX) >
+    Math.abs(diffX)
+    >
     Math.abs(diffY)
   ) {
 
-    if (diffX > 45) {
+
+    /*
+      Swipe Left
+    */
+
+    if (
+      diffX > 45
+    ) {
 
       nextSlide();
 
     }
 
-    else if (diffX < -45) {
+
+    /*
+      Swipe Right
+    */
+
+    else if (
+      diffX < -45
+    ) {
 
       previousSlide();
 
@@ -617,100 +1034,111 @@ function handleSwipe() {
 }
 
 
-/* =====================================================
-   KEYBOARD SUPPORT
-===================================================== */
+/* ==============================================
+   KEYBOARD
+============================================== */
 
 document.addEventListener(
-  "keydown",
-  function(event) {
+"keydown",
+event => {
 
-    if (event.key === "ArrowRight") {
+  if (
+    event.key ===
+    "ArrowRight"
+  ) {
 
-      nextSlide();
+    nextSlide();
 
-      userInteraction();
-
-    }
-
-
-    if (event.key === "ArrowLeft") {
-
-      previousSlide();
-
-      userInteraction();
-
-    }
+    userInteraction();
 
   }
-);
 
 
-/* =====================================================
+  if (
+    event.key ===
+    "ArrowLeft"
+  ) {
+
+    previousSlide();
+
+    userInteraction();
+
+  }
+
+});
+
+
+/* ==============================================
    PRELOAD
-   โหลดรูปข้างหน้า/ข้างหลังไว้ก่อน
-===================================================== */
+
+   โหลดรูปถัดไปไว้ล่วงหน้า
+============================================== */
 
 function preloadNearbyImages() {
 
   const nextIndex =
-    (currentIndex + 1)
-    % images.length;
+  (currentIndex + 1)
+  %
+  images.length;
 
 
   const previousIndex =
-    (
-      currentIndex - 1
-      + images.length
-    )
-    % images.length;
+  (
+    currentIndex
+    - 1
+    + images.length
+  )
+  %
+  images.length;
 
 
   [
     images[nextIndex],
     images[previousIndex]
   ]
+
   .forEach(
-    function(src) {
+  src => {
 
-      const image =
-        new Image();
+    const img =
+    new Image();
 
-      image.src = src;
+    img.src =
+    src;
 
-    }
-  );
+  });
 
 }
 
 
-/* =====================================================
-   PAUSE WHEN TAB NOT ACTIVE
-===================================================== */
+/* ==============================================
+   PAUSE WHEN TAB HIDDEN
+============================================== */
 
 document.addEventListener(
-  "visibilitychange",
-  function() {
+"visibilitychange",
+() => {
 
-    if (document.hidden) {
+  if (
+    document.hidden
+  ) {
 
-      stopAutoSlide();
-
-    }
-
-    else {
-
-      startAutoSlide();
-
-    }
+    stopAutoSlide();
 
   }
-);
+
+  else {
+
+    startAutoSlide();
+
+  }
+
+});
 
 
-/* =====================================================
+/* ==============================================
    START
-===================================================== */
+============================================== */
 
 updateSlider();
 
@@ -720,4 +1148,3 @@ startAutoSlide();
 
 </body>
 </html>
-```

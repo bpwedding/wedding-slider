@@ -1052,7 +1052,13 @@ body.ios-gallery-viewer #slider .next {
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-const YOUTUBE_VIDEO_ID = "KZIxYD2LWCI";
+const YOUTUBE_PLAYLIST = [
+  "KZIxYD2LWCI",
+  "sotnjcMeGdQ",
+  "PsF5rZwx9eA"
+];
+let currentSongIndex = 0;
+const YOUTUBE_VIDEO_ID = YOUTUBE_PLAYLIST[currentSongIndex];
 let youtubePlayer;
 let musicPlaying = false;
 let youtubeReady = false;
@@ -1071,24 +1077,32 @@ function onYouTubeIframeAPIReady() {
       fs: 0,
       playsinline: 1,
       rel: 0,
-      loop: 1,
-      playlist: YOUTUBE_VIDEO_ID,
+      loop: 0,
       origin: window.location.origin
     },
     events: {
       onReady: function() {
         youtubeReady = true;
-        musicButton.textContent = "♪ PLAY MUSIC";
+        musicButton.textContent = "♪ PLAY MUSIC  1/3";
       },
       onStateChange: function(event) {
         if (event.data === YT.PlayerState.PLAYING) {
           musicPlaying = true;
-          musicButton.textContent = "❚❚ PAUSE MUSIC";
+          musicButton.textContent =
+            "❚❚ PAUSE MUSIC  " + (currentSongIndex + 1) + "/" + YOUTUBE_PLAYLIST.length;
         }
-        if (event.data === YT.PlayerState.PAUSED ||
-            event.data === YT.PlayerState.ENDED) {
+
+        if (event.data === YT.PlayerState.PAUSED) {
           musicPlaying = false;
-          musicButton.textContent = "♪ PLAY MUSIC";
+          musicButton.textContent =
+            "♪ PLAY MUSIC  " + (currentSongIndex + 1) + "/" + YOUTUBE_PLAYLIST.length;
+        }
+
+        if (event.data === YT.PlayerState.ENDED) {
+          currentSongIndex =
+            (currentSongIndex + 1) % YOUTUBE_PLAYLIST.length;
+          musicPlaying = true;
+          youtubePlayer.loadVideoById(YOUTUBE_PLAYLIST[currentSongIndex]);
         }
       },
       onError: function(event) {
